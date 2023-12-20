@@ -111,8 +111,8 @@
 
                     {{ forms.textField({
                         first: true,
-                        label: "Media Asset API Key"|t('media-manager'),
-                        instructions: "PBS Media API Key used by this media asset."|t('media-manager'),
+                        label: "Media Asset Content ID"|t('media-manager'),
+                        instructions: "PBS Media Content ID used by this media asset."|t('media-manager'),
                         id: 'apiKey',
                         name: 'apiKey',
                         value: activeShow.apiKey,
@@ -206,8 +206,8 @@
                             Nothing to see here, you might want to create New Show first. <br/><br/>
                             <a href="{{ url(pluginCpUrl) ~ '/shows/' }}" class="btn submit">Create New Show</a>
                         {% else %}
-                            To start Synchronize, you need to set a valid API ID for <strong>{{ activeShow.name }}</strong> first. <br/><br/>
-                            <a href="{{ url(pluginCpUrl) ~ '/shows/' ~ activeShow.id }}" class="btn submit">Set API Key Now</a>
+                            To start Synchronize, you need to set a valid Content ID for <strong>{{ activeShow.name }}</strong> first. <br/><br/>
+                            <a href="{{ url(pluginCpUrl) ~ '/shows/' ~ activeShow.id }}" class="btn submit">Set Content ID Now</a>
                         {% endif %}
                     {% endif %}
             {% endswitch %}

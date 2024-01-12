@@ -58,6 +58,12 @@ class MediaSync extends BaseJob
     public $singleAssetKey;
 
     public $forceRegenerateThumbnail;
+	
+	
+		/**
+		 * @var string|array
+		 */
+		public $fieldsToSync = '*';
 
     public $siteTags = [];
     public $filmTags = [];
@@ -89,7 +95,7 @@ class MediaSync extends BaseJob
 				
         $url         = $this->generateAPIUrl( $this->assetType, $this->apiKey, $this->singleAsset, $this->singleAssetKey );
         $mediaAssets = $this->fetchMediaAssets( $url );
-				//Craft::warning("Fetching this url: " . $url, __METHOD__);
+
         if( $this->singleAsset ) {
             $mediaAssets = [ $mediaAssets ];
         }
@@ -111,18 +117,34 @@ class MediaSync extends BaseJob
                 $availabilities->public->end
             );
 
+						$isNew = !$existingEntry;
+						
             // Set default field Values
             $defaultFields = [];
 
             // Set field values based on API Column Fields on settings
             $apiColumnFields = SettingsHelper::get( 'apiColumnFields' );
+						
+						if($this->fieldsToSync === '*' || in_array('title', $this->fieldsToSync) || $isNew) {
+								$entry->title = $assetAttributes->title;
+						}
 
             foreach( $apiColumnFields as $apiColumnField ) {
                 
                 $apiField = $apiColumnField[ 0 ];
-
+								
+								// ensure the field to be updated from MM Settings is included in the fieldsToSync array
+								if($isNew && $this->fieldsToSync !== '*' && !in_array($apiField, $this->fieldsToSync) ) {
+									continue;
+								}
+							
                 switch( $apiField ) {
                     case 'thumbnail':
+											$thumbnail = $this->createOrUpdateThumbnail( $entry->title, $assetAttributes->images[ 0 ] );
+
+                      if($thumbnail) {
+                        $defaultFields[ SynchronizeHelper::getThumbnailField() ] = [ $thumbnail->id ];
+                      }
                     break;
                     case 'images':
                         $imagesHandle = SynchronizeHelper::getApiField( $apiField );
@@ -182,7 +204,12 @@ class MediaSync extends BaseJob
                         // Generate Site Tags
                         $siteTags = [];
                         
+                        if( !is_array( $this->siteId ) ) {
+                            $this->siteId = json_decode( $this->siteId );
+                        }
+
                         foreach( $this->siteId as $siteId ) {
+
                             $site = Craft::$app->sites->getSiteById( $siteId );
                             $tag = $this->findOrCreateTag( $site->name, $siteTagGroupId );
                             
@@ -224,9 +251,7 @@ class MediaSync extends BaseJob
                             }
 
                             if( $film ) {
-                                if( $tag ) {
-                                    array_push( $filmTags, $film->id );
-                                }
+                                $filmTags[] = $film->id;
                             }
                         }
 
@@ -464,7 +489,7 @@ class MediaSync extends BaseJob
     private function processAdditionalFields( $defaultFields, $assetAttributes, $existingEntry, $entry, $forceRegenerateThumbnail )
     {
         // If user choose to force regenerate thumbnail
-        if( $forceRegenerateThumbnail == 'true' ) {
+        if($forceRegenerateThumbnail && $forceRegenerateThumbnail !== 'false') {
 
             $thumbnail = $this->createOrUpdateThumbnail( $entry->title, $assetAttributes->images[ 0 ] );
 
@@ -484,7 +509,6 @@ class MediaSync extends BaseJob
             }
 
         } else {
-
             // Regenerate if entry already exist and thumbnail is empty
             // or inaccessible due to Enabled Sites incomplete against Supported Sites which causing thumbnail empty
             if( $thumbnail = $this->thumbnailNotAccessibleAcrossSites( $entry ) ) {
@@ -497,7 +521,6 @@ class MediaSync extends BaseJob
 
     private function findExistingMediaEntry( $mediaManagerId )
     {
-	    Craft::warning($this->siteId, __METHOD__);
         // Find existing media
         $entry = Entry::find()
                     ->{ SynchronizeHelper::getMediaManagerIdField() }( $mediaManagerId )
@@ -619,7 +642,6 @@ class MediaSync extends BaseJob
         $asset     = Asset::findOne( [ 'filename' => $filename ] );
 
         if( $asset ) {
-
             // Need to regenerate if existing asset is inaccessible by some sites
             if( $this->compareEnabledSupportedSites( $asset ) ) {
                 return $asset;

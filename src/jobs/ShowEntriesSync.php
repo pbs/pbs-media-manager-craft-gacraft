@@ -150,6 +150,34 @@ class ShowEntriesSync extends BaseJob
                         $defaultFields[ SynchronizeHelper::getApiField( $apiField, 'showApiColumnFields' ) ] = $showAttributes->description_short;
                     }
                 break;
+										
+                case 'show_site_url':
+									if(isset( $showAttributes->links) && is_array($showAttributes->links)){
+                        foreach($showAttributes->links as $link) {
+                            if($link->profile == 'producer') {
+																$defaultFields[ SynchronizeHelper::getApiField( $apiField, 'showApiColumnFields' ) ] = $link->value;
+														}
+                        }
+                    }
+								break;
+
+	              case 'available_for_purchase':
+									$availableForPurchase = 0;
+									$purchasablePlatforms = ['itunes', 'amazon', 'buy-dvd', 'roku', 'apple-tv', 'ios'];
+									if(isset( $showAttributes->links) && is_array($showAttributes->links)){
+                        foreach($showAttributes->links as $link) {
+                            if($availableForPurchase || !in_array($link->profile, $purchasablePlatforms)){
+																continue;
+                            }
+														if(in_array($link->profile, $purchasablePlatforms)){
+																$availableForPurchase = 1;
+														}
+                        }
+												$defaultFields[ SynchronizeHelper::getApiField( $apiField, 'showApiColumnFields' ) ] = $availableForPurchase;
+                    }
+								break;
+
+               
 
                 default:
                     $defaultFields[ SynchronizeHelper::getApiField( $apiField, 'showApiColumnFields' ) ] = $showAttributes->{ $apiField };
@@ -175,9 +203,9 @@ class ShowEntriesSync extends BaseJob
 
     // Private Methods
     // =========================================================================
-     
+    
     private function log( $message )
-    {   
+    {
         if( $this->logProcess ) {
             $log = date( 'Y-m-d H:i:s' ) .' '. $message . "\n";
             FileHelper::writeToFile( Craft::getAlias( $this->logFile ), $log, [ 'append' => true ] );

@@ -1,7 +1,7 @@
 {
   "name": "moon/pbs-media-manager-craft-gacraft",
   "description": "Media Manager 3 for PBS API",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "type": "craft-plugin",
   "keywords": ["craftcms", "pbs", "media-manager"],
   "license": "MIT",
@@ -32,5 +32,11 @@
     "name": "Media Manager",
     "documentationUrl": "https://projects.pbs.org/bitbucket/projects/MOON/repos/pbs-media-manager-craft-plugin/browse/README.md",
     "class": "papertiger\\mediamanager\\MediaManager"
+  },
+  "config": {
+    "allow-plugins": {
+      "craftcms/plugin-installer": true,
+      "yiisoft/yii2-composer": true
+    }
   }
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.3.1 - 2024-02-01
+
+### Added
+
+- `mediamanager/schedule/run` console command to run the scheduled sync jobs.
+
 ## 3.3.0 - 2024-01-12
 
 ### Added

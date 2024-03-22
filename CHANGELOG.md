@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.0.0 - 2024-03-22
+
+- Stable Craft 4 release
+
+### Fixed
+
+- Entries not getting correct status when no availabilities are present
+
+## 4.0.0-beta.1 - 2024-02-05
+
+- adds support for Craft 4
+- update control panel template button listener JS functionality
+- add support for alternative rich text plugins, namely CK Editor
+
 ## 3.3.1 - 2024-02-01
 
 ### Added

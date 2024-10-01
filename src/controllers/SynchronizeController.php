@@ -226,12 +226,11 @@ class SynchronizeController extends Controller
         $validatedShows = [];
         $request = Craft::$app->getRequest();
 
-        foreach( $shows as $show ) {
-            
-            if( $show->apiKey && $show->name ) {
-                
-                $show[ 'siteId' ] = json_decode( $show[ 'siteId' ] );
-                array_push( $validatedShows, $show );
+        $showsToSync = $request->getBodyParam('showsToSync', []);
+        foreach($shows as $show) {
+            if($show->apiKey && $show->name && (collect($showsToSync)->search($show->apiKey) !== false)) {
+                $show['siteId'] = json_decode($show['siteId']);
+                $validatedShows[] = $show;
             }
         }
 

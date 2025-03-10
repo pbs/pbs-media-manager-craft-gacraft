@@ -30,6 +30,13 @@ class SettingsModel extends Model
     public $mediaFieldGroup;
     public $showSection;
 
+    public $blogTagsSection;
+    public $dateTagsSection;
+    public $filmTagsSection;
+    public $siteTagsSection;
+    public $themeTagsSection;
+    public $topicTagsSection;
+
     public $apiCraftUser        = '';
     public $apiBaseUrl          = '';
 
@@ -51,12 +58,12 @@ class SettingsModel extends Model
     {
         return [
             [
-                ConstantAbstract::REQUIRED_SETTINGS, 
-                'required' 
+                ConstantAbstract::REQUIRED_SETTINGS,
+                'required'
             ],
             [
-                [ 'apiCraftUser' ], 
-                'required' 
+                [ 'apiCraftUser' ],
+                'required'
             ],
             [
                 [ 'apiBaseUrl' ],

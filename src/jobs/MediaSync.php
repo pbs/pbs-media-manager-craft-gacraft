@@ -227,8 +227,8 @@ class MediaSync extends BaseJob
                         foreach( $this->siteId as $siteId ) {
 
                             $site = Craft::$app->sites->getSiteById( $siteId );
-                            $tag = $this->findOrCreateTag( $site->name, $siteTagGroupId );
-                            
+                            $siteTagSectionInfo = SynchronizeHelper::getSiteTagSectionInfo();
+                            $tag = $this->findOrCreateTag( $site->name, $siteTagSectionInfo );
                             if( $tag ) {
                                 array_push( $siteTags, $tag->id );
                             }
@@ -242,8 +242,7 @@ class MediaSync extends BaseJob
 
                         // Prepare craft field handle and prepare tag group id
                         $filmTagFieldHandle = SynchronizeHelper::getFilmTagsField();
-                        $filmTagGroupId     = SynchronizeHelper::getTagGroupIdByCraftFieldHandle( $filmTagFieldHandle );
-                        
+                        $filmTagSectionInfo = SynchronizeHelper::getFilmTagSectionInfo();
                         // Generate Film Tags
                         $parentTree = $assetAttributes->parent_tree;
                         $filmTags   = [];
@@ -259,11 +258,11 @@ class MediaSync extends BaseJob
                             }
 
                             if( $parentAttributes && isset( $parentAttributes->show ) && isset( $parentAttributes->show->attributes ) && isset( $parentAttributes->show->attributes->title ) ) {
-                                $film = $this->findOrCreateTag( $parentAttributes->show->attributes->title, $filmTagGroupId );
+                                $film = $this->findOrCreateTag( $parentAttributes->show->attributes->title, $filmTagSectionInfo );
                             }
 
                             if( !$film && $parentTree->type == 'show' && isset( $parentTree->attributes ) && isset( $parentTree->attributes->title ) ) {
-                                $film = $this->findOrCreateTag( $parentTree->attributes->title, $filmTagGroupId );
+                                $film = $this->findOrCreateTag( $parentTree->attributes->title, $filmTagSectionInfo );
                             }
 
                             if( $film ) {
@@ -279,8 +278,7 @@ class MediaSync extends BaseJob
 
                         // Prepare craft field handle and prepare tag group id
                         $topicTagFieldHandle = SynchronizeHelper::getTopicTagsField();
-                        $topicTagGroupId     = SynchronizeHelper::getTagGroupIdByCraftFieldHandle( $topicTagFieldHandle );
-
+                        $topicTagSectionInfo = SynchronizeHelper::getTopicTagSectionInfo();
                         // Generate Topic Tags
                         $topicAttributes = $assetAttributes->topics;
                         $topicTags       = [];
@@ -291,8 +289,8 @@ class MediaSync extends BaseJob
 
                                 if( isset( $topic->name ) ) {
 
-                                    $tag = $this->findOrCreateTag( $topic->name, $topicTagGroupId );
-                                    
+                                    $tag = $this->findOrCreateTag( $topic->name, $topicTagSectionInfo );
+
                                     if( $tag ) {
                                         array_push( $topicTags, $tag->id );
                                     }
@@ -386,10 +384,6 @@ class MediaSync extends BaseJob
             // Process additional fields
             $defaultFields = $this->processAdditionalFields( $defaultFields, $assetAttributes, $existingEntry, $entry, $this->forceRegenerateThumbnail );
 
-            if (SynchronizeHelper::getTagGroupIdByCraftFieldHandle( 'assetType')) {
-                $assetTypeTag = $this->findOrCreateTag($this->assetType, SynchronizeHelper::getTagGroupIdByCraftFieldHandle( 'assetType'));
-                $entry->setFieldValue('assetType', [$assetTypeTag->id]);
-            }
 
             // Set field values and properties
             $entry->setFieldValues( $defaultFields );
@@ -483,19 +477,25 @@ class MediaSync extends BaseJob
         return $response->data;
     }
 
-    private function findOrCreateTag( $title, $groupId )
+    private function findOrCreateTag( $title, $sectionInfo )
     {
-        $tag = Tag::find()
-                ->where( [ 'title' => $title ] )
-                ->groupId( $groupId )
+        if( !$sectionInfo ) {
+            return null;
+        }
+
+        $section = Craft::$app->sections->getSectionById( $sectionInfo[ 'id' ] );
+
+        $tag = Entry::find()
+                ->title($title)
+                ->section($section)
                 ->one();
 
         if( !$tag ) {
-
-            $tag          = new Tag();
+            $tag          = new Entry();
+            $tag->sectionId = $sectionInfo[ 'id' ];
+            $tag->typeId   = $sectionInfo[ 'entryTypeId' ];
             $tag->title   = $title;
-            $tag->groupId = $groupId;
-
+            $tag->authorId = $this->authorId;
             Craft::$app->getElements()->saveElement( $tag );
         }
 

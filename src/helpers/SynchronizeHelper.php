@@ -57,14 +57,115 @@ class SynchronizeHelper
         return $section->id;
     }
 
+    public static function getBlogTagSectionInfo()
+    {
+        $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'blogTagsSection' ) );
+
+        if( !$section ) {
+            return false;
+        }
+
+        $sectionId = $section->id;
+        $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
+
+        return [
+            'id' => $sectionId,
+            'entryTypeId' => $entryTypeId,
+        ];
+    }
+
+    public static function getDateTagSectionInfo()
+    {
+        $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'dateTagsSection' ) );
+
+        if( !$section ) {
+            return false;
+        }
+
+        $sectionId = $section->id;
+        $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
+
+        return [
+            'id' => $sectionId,
+            'entryTypeId' => $entryTypeId,
+        ];
+    }
+
+    public static function getFilmTagSectionInfo()
+    {
+        $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'filmTagsSection' ) );
+
+        if( !$section ) {
+            return false;
+        }
+
+        $sectionId = $section->id;
+        $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
+
+        return [
+            'id' => $sectionId,
+            'entryTypeId' => $entryTypeId,
+        ];
+    }
+
+    public static function getSiteTagSectionInfo()
+    {
+        $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'siteTagsSection' ) );
+
+        if( !$section ) {
+            return false;
+        }
+
+        $sectionId = $section->id;
+        $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
+
+        return [
+            'id' => $sectionId,
+            'entryTypeId' => $entryTypeId,
+        ];
+    }
+
+    public static function getThemeTagSectionInfo()
+    {
+        $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'themeTagsSection' ) );
+
+        if( !$section ) {
+            return false;
+        }
+
+        $sectionId = $section->id;
+        $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
+
+        return [
+            'id' => $sectionId,
+            'entryTypeId' => $entryTypeId,
+        ];
+    }
+
+    public static function getTopicTagSectionInfo()
+    {
+        $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'topicTagsSection' ) );
+
+        if( !$section ) {
+            return false;
+        }
+
+        $sectionId = $section->id;
+        $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
+
+        return [
+            'id' => $sectionId,
+            'entryTypeId' => $entryTypeId,
+        ];
+    }
+
     public static function getShowSectionTypeId()
     {
         $sectionId  = self::getShowSectionId();
         $entryTypes = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
 
         if( !is_array( $entryTypes ) && !$entryTypes[ 0 ] ) {
-            return false;
-        }
+            return false;        }
 
         return $entryTypes[ 0 ]->id;
     }

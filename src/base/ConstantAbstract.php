@@ -23,7 +23,7 @@ abstract class ConstantAbstract
     const DEPENDENCY_PLUGIN_CRAFT_REDACTOR_HANDLE  = 'redactor';
     const DEPENDENCY_PLUGIN_CRAFT_REDACTOR_PACKAGE = 'craftcms/redactor';
     const DEPENDENCY_PLUGIN_CRAFT_REDACTOR_VERSION = '>=2.3.0';
-    
+
     const API_COLUMN_FIELDS  = [
         // Special Fields
         [ 'thumbnail', '', 'Thumbnail', 'thumbnail', 'craft\fields\Assets' ],
@@ -121,7 +121,7 @@ abstract class ConstantAbstract
 
     const MEDIAMANAGER_SHOW_TABLE_NAME         = 'mediamanager_show';
     const MEDIAMANAGER_SHOW_TABLE              = '{{%mediamanager_show}}';
-		
+
 		const MEDIAMANAGER_SCHEDULED_SYNC_TABLE    = '{{%mediamanager_scheduled_syncs}}';
     const MEDIAMANAGER_OLD_SETTINGS_TABLE_NAME = 'mediamanager_old_settings';
     const MEDIAMANAGER_OLD_SETTINGS_TABLE      = '{{%mediamanager_old_settings}}';

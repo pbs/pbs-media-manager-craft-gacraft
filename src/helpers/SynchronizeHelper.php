@@ -22,11 +22,11 @@ class SynchronizeHelper
 {
     // Public Static Methods
     // =========================================================================
-    
+
     public static function getSectionId()
     {
         $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'mediaSection' ) );
-        
+
         if( !$section ) {
             return false;
         }
@@ -45,11 +45,11 @@ class SynchronizeHelper
 
         return $entryTypes[ 0 ]->id;
     }
-    
+
     public static function getShowSectionId()
     {
         $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'showSection' ) );
-        
+
         if( !$section ) {
             return false;
         }
@@ -165,7 +165,8 @@ class SynchronizeHelper
         $entryTypes = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
 
         if( !is_array( $entryTypes ) && !$entryTypes[ 0 ] ) {
-            return false;        }
+            return false;
+        }
 
         return $entryTypes[ 0 ]->id;
     }
@@ -189,17 +190,17 @@ class SynchronizeHelper
     public static function getAssetFolderId()
     {
         $volume = Craft::$app->volumes->getVolumeByHandle( SettingsHelper::get( 'mediaAssetVolume' ) );
-        
+
         if( !$volume ) {
             return false;
         }
 
         $folder = Craft::$app->assets->findFolder( [ 'parentId' => $volume->id ] );
-        
+
         if( !$folder ) {
             return false;
         }
-        
+
         return $folder->id;
     }
 
@@ -257,7 +258,7 @@ class SynchronizeHelper
     {
         return self::getCraftFieldHandleByApiHandle( 'season' );
     }
-    
+
     public static function getEpisodeField()
     {
         return self::getCraftFieldHandleByApiHandle( 'episode' );
@@ -345,7 +346,7 @@ class SynchronizeHelper
 
     // Private Static Methods
     // =========================================================================
-    
+
     private static function getCraftFieldHandleByApiHandle( $fieldApiHandle, $settingName = 'apiColumnFields' )
     {
         $fieldsToSearch = SettingsHelper::get( $settingName );
@@ -366,7 +367,7 @@ class SynchronizeHelper
 
         return $fieldHandle;
     }
-    
+
     private static function getApiRuleByApiHandle( $fieldApiHandle, $settingName = 'apiColumnFields' )
     {
         $fieldsToSearch = SettingsHelper::get( $settingName );

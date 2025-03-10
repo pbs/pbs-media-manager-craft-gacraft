@@ -11,14 +11,12 @@
 namespace papertiger\mediamanager\jobs;
 
 use Craft;
-use craft\db\Query;
 use craft\errors\ElementNotFoundException;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Json;
 use craft\queue\BaseJob;
 use craft\elements\Entry;
 use craft\elements\Asset;
-use craft\elements\Tag;
 use craft\helpers\FileHelper;
 use craft\helpers\ElementHelper;
 use craft\helpers\Assets as AssetHelper;

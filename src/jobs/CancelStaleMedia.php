@@ -14,13 +14,6 @@ use Craft;
 use craft\helpers\Db;
 use craft\queue\BaseJob;
 use craft\elements\Entry;
-use craft\elements\Asset;
-use craft\elements\Tag;
-use craft\helpers\ElementHelper;
-use craft\helpers\Assets as AssetHelper;
-
-use papertiger\mediamanager\MediaManager;
-use papertiger\mediamanager\helpers\SettingsHelper;
 
 class CancelStaleMedia extends BaseJob
 {

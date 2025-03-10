@@ -47,7 +47,7 @@ class MediaSync extends BaseJob
 
     // Public Properties
     // =========================================================================
-    
+
     public $assetType;
     public $siteId;
     public $title;
@@ -58,8 +58,8 @@ class MediaSync extends BaseJob
     public $singleAssetKey;
 
     public $forceRegenerateThumbnail;
-	
-	
+
+
 		/**
 		 * @var string|array
 		 */
@@ -72,7 +72,7 @@ class MediaSync extends BaseJob
 
     // Private Properties
     // =========================================================================
-    
+
     private $dateWithMs = 'Y-m-d\TH:i:s.uP';
 
 
@@ -89,17 +89,17 @@ class MediaSync extends BaseJob
         $this->mediaFolderId  = SynchronizeHelper::getAssetFolderId(); // MEDIA_FOLDER_ID
         $this->logProcess     = 1; // LOG_PROCESS
         $this->logFile        = '@storage/logs/sync.log'; // LOG_FILE
-				
+
 	      // Convert Site ID from string (json) to array
 	      $this->_sanitizeSiteId();
-				
+
         $url         = $this->generateAPIUrl( $this->assetType, $this->apiKey, $this->singleAsset, $this->singleAssetKey );
         $mediaAssets = $this->fetchMediaAssets( $url );
 
         if( $this->singleAsset ) {
             $mediaAssets = [ $mediaAssets ];
         }
-        
+
         $totalAssets = count( $mediaAssets );
         $count       = 0;
 
@@ -108,7 +108,7 @@ class MediaSync extends BaseJob
             $availabilities  = $assetAttributes->availabilities;
 
             $existingEntry       = $this->findExistingMediaEntry( $mediaAsset->id );
-            
+
 						// if all availabilities are null, early return
             if( $availabilities->public->start === null && $availabilities->public->end === null &&
 								$availabilities->all_members->start === null && $availabilities->all_members->end === null &&
@@ -120,10 +120,10 @@ class MediaSync extends BaseJob
 			            Craft::$app->getElements()->saveElement( $existingEntry );
 			            $this->setProgress( $queue, $count++ / $totalAssets );
 								}
-								
+
 								continue;
 							}
-						
+
 						$entry = $this->chooseOrCreateMediaEntry( $assetAttributes->title, $existingEntry );
             $expirationStatus = $this->determineExpirationStatus( $availabilities->public->end );
             $displayPassportIcon = $this->determinePassportStatus(
@@ -132,7 +132,7 @@ class MediaSync extends BaseJob
                 $availabilities->public->start,
                 $availabilities->public->end
             );
-						
+
 						$isNew = !$existingEntry;
 
             // Set default field Values
@@ -140,20 +140,20 @@ class MediaSync extends BaseJob
 
             // Set field values based on API Column Fields on settings
             $apiColumnFields = SettingsHelper::get( 'apiColumnFields' );
-						
+
 						if($this->fieldsToSync === '*' || in_array('title', $this->fieldsToSync) || $isNew ){
 								$entry->title = $assetAttributes->title;
 						}
 
             foreach( $apiColumnFields as $apiColumnField ) {
-                
+
                 $apiField = $apiColumnField[ 0 ];
-								
+
 								// ensure the field to be updated from MM Settings is included in the fieldsToSync array
 								if(!$isNew && ($this->fieldsToSync !== '*' && !in_array($apiField, $this->fieldsToSync)) ) {
 									continue;
 								}
-							
+
                 switch( $apiField ) {
                     case 'thumbnail':
 											$thumbnail = $this->createOrUpdateThumbnail( $entry->title, $assetAttributes->images[ 0 ] );
@@ -167,7 +167,7 @@ class MediaSync extends BaseJob
                         $fieldRule    = SynchronizeHelper::getApiFieldRule( $apiField );
 
                         if( isset( $assetAttributes->images ) && is_array( $assetAttributes->images ) ) {
-                            
+
                             $assets = [];
 
                             foreach( $assetAttributes->images as $image ) {
@@ -219,7 +219,7 @@ class MediaSync extends BaseJob
 
                         // Generate Site Tags
                         $siteTags = [];
-                        
+
                         if( !is_array( $this->siteId ) ) {
                             $this->siteId = json_decode( $this->siteId );
                         }
@@ -229,6 +229,7 @@ class MediaSync extends BaseJob
                             $site = Craft::$app->sites->getSiteById( $siteId );
                             $siteTagSectionInfo = SynchronizeHelper::getSiteTagSectionInfo();
                             $tag = $this->findOrCreateTag( $site->name, $siteTagSectionInfo );
+
                             if( $tag ) {
                                 array_push( $siteTags, $tag->id );
                             }
@@ -236,7 +237,7 @@ class MediaSync extends BaseJob
                         }
 												$this->siteTags = $siteTags;
                         $defaultFields[ $siteTagFieldHandle ] = $siteTags;
-												
+
                     break;
                     case 'film_tags':
 
@@ -269,7 +270,7 @@ class MediaSync extends BaseJob
                                 $filmTags[] = $film->id;
                             }
                         }
-												
+
 												$this->filmTags = $filmTags;
                         $defaultFields[ $filmTagFieldHandle ] = $filmTags;
 
@@ -320,7 +321,7 @@ class MediaSync extends BaseJob
                     case 'object_type':
                         $defaultFields[ SynchronizeHelper::getApiField( $apiField ) ] = ucwords( str_replace( '_', ' ', $assetAttributes->object_type ) );
                     break;
-                    
+
                     case 'season':
 
                         $seasonId   = '';
@@ -342,7 +343,7 @@ class MediaSync extends BaseJob
                                 }
 
                             } elseif( $parentTree->type == 'season' ) {
-                                
+
                                 $parentAttributes = $parentTree->attributes;
 
                                 if( isset( $parentAttributes->ordinal ) ) {
@@ -350,7 +351,7 @@ class MediaSync extends BaseJob
                                 }
                             }
                         }
-                        
+
                         $defaultFields[ SynchronizeHelper::getApiField( $apiField ) ] = $seasonId;
 
                     break;
@@ -384,10 +385,9 @@ class MediaSync extends BaseJob
             // Process additional fields
             $defaultFields = $this->processAdditionalFields( $defaultFields, $assetAttributes, $existingEntry, $entry, $this->forceRegenerateThumbnail );
 
-
             // Set field values and properties
             $entry->setFieldValues( $defaultFields );
-						
+
             if( $availabilities->all_members->end ) {
 								if(DateTimeHelper::isInThePast($availabilities->all_members->end)){
 									Craft::warning("{$mediaAsset->id} is expired. Exiting.");
@@ -396,7 +396,7 @@ class MediaSync extends BaseJob
                 $tempExpiryDate    = strtotime( $availabilities->all_members->end );
                 $entry->expiryDate = new \DateTime( date( 'Y-m-d H:i:s', $tempExpiryDate ) );
             }
-						
+
 						$markForDeletion = 0;
 						if( $availabilities->public->start === null && $availabilities->all_members->start === null){
 							$markForDeletion = 1;
@@ -734,20 +734,20 @@ class MediaSync extends BaseJob
 	      $public = $availabilities->public;
 				$allMembers = $availabilities->all_members;
 				$stationMembers = $availabilities->station_members;
-				
+
 				if( $public->start === null && $public->end === null &&
 						$allMembers->start === null && $allMembers->end === null &&
 						$stationMembers->start === null && $stationMembers->end === null
 					) {
 						return 0;
 				}
-				
+
 				$endDate = $allMembers->end;
-	      
+
         if( $allMembers->start && !$endDate) {
             return 1;
         }
-				
+
         $currentTime = strtotime('now');
         return (strtotime($endDate) > $currentTime) ? 1 : 0;
     }
@@ -787,7 +787,7 @@ class MediaSync extends BaseJob
             return "${seconds}s";
         }
     }
-		
+
 		private function _sanitizeSiteId()
 		{
 			if( !is_array( $this->siteId ) ) {

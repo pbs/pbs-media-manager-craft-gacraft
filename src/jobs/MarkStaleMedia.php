@@ -7,27 +7,19 @@
 	 * @copyright     Copyright (c) 2020 Paper Tiger
 	 * @link          https://www.papertiger.com/
 	 */
-	
+
 	namespace papertiger\mediamanager\jobs;
-	
+
 	use Craft;
-	use craft\helpers\Db;
 	use craft\helpers\Json;
 	use craft\queue\BaseJob;
 	use craft\elements\Entry;
-	use craft\elements\Asset;
-	use craft\elements\Tag;
-	use craft\helpers\ElementHelper;
-	use craft\helpers\Assets as AssetHelper;
-	
+
 	use DateTime;
 	use GuzzleHttp\Exception\ClientException;
-	use GuzzleHttp\Exception\GuzzleException;
 	use GuzzleHttp\Exception\RequestException;
 	use papertiger\mediamanager\MediaManager;
-	use papertiger\mediamanager\helpers\SettingsHelper;
-	use papertiger\mediamanager\services\Api;
-	
+
 	class MarkStaleMedia extends BaseJob
 	{
 

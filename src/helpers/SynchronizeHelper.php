@@ -68,10 +68,12 @@ class SynchronizeHelper
         $sectionId = $section->id;
         $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
 
-        return [
-            'id' => $sectionId,
-            'entryTypeId' => $entryTypeId,
-        ];
+        $res = ['id' => $sectionId];
+
+        if($entryTypeId){
+            $res['entryTypeId'] = $entryTypeId[0]->id;
+        }
+        return $res;
     }
 
     public static function getDateTagSectionInfo()
@@ -85,10 +87,12 @@ class SynchronizeHelper
         $sectionId = $section->id;
         $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
 
-        return [
-            'id' => $sectionId,
-            'entryTypeId' => $entryTypeId,
-        ];
+        $res = ['id' => $sectionId];
+
+        if($entryTypeId){
+            $res['entryTypeId'] = $entryTypeId[0]->id;
+        }
+        return $res;
     }
 
     public static function getFilmTagSectionInfo()
@@ -102,10 +106,12 @@ class SynchronizeHelper
         $sectionId = $section->id;
         $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
 
-        return [
-            'id' => $sectionId,
-            'entryTypeId' => $entryTypeId,
-        ];
+        $res = ['id' => $sectionId];
+
+        if($entryTypeId){
+            $res['entryTypeId'] = $entryTypeId[0]->id;
+        }
+        return $res;
     }
 
     public static function getSiteTagSectionInfo()
@@ -119,10 +125,12 @@ class SynchronizeHelper
         $sectionId = $section->id;
         $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
 
-        return [
-            'id' => $sectionId,
-            'entryTypeId' => $entryTypeId,
-        ];
+        $res = ['id' => $sectionId];
+
+        if($entryTypeId){
+            $res['entryTypeId'] = $entryTypeId[0]->id;
+        }
+        return $res;
     }
 
     public static function getThemeTagSectionInfo()
@@ -136,10 +144,12 @@ class SynchronizeHelper
         $sectionId = $section->id;
         $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
 
-        return [
-            'id' => $sectionId,
-            'entryTypeId' => $entryTypeId,
-        ];
+        $res = ['id' => $sectionId];
+
+        if($entryTypeId){
+            $res['entryTypeId'] = $entryTypeId[0]->id;
+        }
+        return $res;
     }
 
     public static function getTopicTagSectionInfo()
@@ -153,10 +163,12 @@ class SynchronizeHelper
         $sectionId = $section->id;
         $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
 
-        return [
-            'id' => $sectionId,
-            'entryTypeId' => $entryTypeId,
-        ];
+        $res = ['id' => $sectionId];
+
+        if($entryTypeId){
+            $res['entryTypeId'] = $entryTypeId[0]->id;
+        }
+        return $res;
     }
 
     public static function getShowSectionTypeId()

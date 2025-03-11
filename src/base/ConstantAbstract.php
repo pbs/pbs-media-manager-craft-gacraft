@@ -23,15 +23,15 @@ abstract class ConstantAbstract
     const DEPENDENCY_PLUGIN_CRAFT_REDACTOR_HANDLE  = 'redactor';
     const DEPENDENCY_PLUGIN_CRAFT_REDACTOR_PACKAGE = 'craftcms/redactor';
     const DEPENDENCY_PLUGIN_CRAFT_REDACTOR_VERSION = '>=2.3.0';
-    
+
     const API_COLUMN_FIELDS  = [
         // Special Fields
         [ 'thumbnail', '', 'Thumbnail', 'thumbnail', 'craft\fields\Assets' ],
         [ 'display_passport_icon', '', 'Display Passport Icon?', 'displayPassportIcon', 'craft\fields\Lightswitch' ],
         [ 'last_synced', '', 'Last Synced', 'lastSynced', 'craft\fields\Date' ],
-        [ 'site_tags', '', 'Site', 'siteTags', 'craft\fields\Tags' ],
-        [ 'film_tags', '', 'Film', 'film', 'craft\fields\Tags' ],
-        [ 'topic_tags', '', 'Topic', 'topic', 'craft\fields\Tags' ],
+        [ 'site_tags', '', 'Site', 'siteTags', 'craft\fields\Entry' ],
+        [ 'film_tags', '', 'Film', 'film', 'craft\fields\Entry' ],
+        [ 'topic_tags', '', 'Topic', 'topic', 'craft\fields\Entry' ],
         [ 'expiration_status', '', 'Expiration Status', 'expirationStatus', 'craft\fields\PlainText' ],
         [ 'media_manager_id', '', 'Media Manager ID', 'mediaManagerId', 'craft\fields\PlainText' ],
         [ 'season', '', 'Season', 'season', 'craft\fields\PlainText' ],
@@ -121,7 +121,7 @@ abstract class ConstantAbstract
 
     const MEDIAMANAGER_SHOW_TABLE_NAME         = 'mediamanager_show';
     const MEDIAMANAGER_SHOW_TABLE              = '{{%mediamanager_show}}';
-		
+
 		const MEDIAMANAGER_SCHEDULED_SYNC_TABLE    = '{{%mediamanager_scheduled_syncs}}';
     const MEDIAMANAGER_OLD_SETTINGS_TABLE_NAME = 'mediamanager_old_settings';
     const MEDIAMANAGER_OLD_SETTINGS_TABLE      = '{{%mediamanager_old_settings}}';

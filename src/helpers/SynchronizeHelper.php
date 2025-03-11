@@ -22,11 +22,11 @@ class SynchronizeHelper
 {
     // Public Static Methods
     // =========================================================================
-    
+
     public static function getSectionId()
     {
         $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'mediaSection' ) );
-        
+
         if( !$section ) {
             return false;
         }
@@ -45,16 +45,118 @@ class SynchronizeHelper
 
         return $entryTypes[ 0 ]->id;
     }
-    
+
     public static function getShowSectionId()
     {
         $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'showSection' ) );
-        
+
         if( !$section ) {
             return false;
         }
 
         return $section->id;
+    }
+
+    public static function getBlogTagSectionInfo()
+    {
+        $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'blogTagsSection' ) );
+
+        if( !$section ) {
+            return false;
+        }
+
+        $sectionId = $section->id;
+        $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
+
+        return [
+            'id' => $sectionId,
+            'entryTypeId' => $entryTypeId,
+        ];
+    }
+
+    public static function getDateTagSectionInfo()
+    {
+        $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'dateTagsSection' ) );
+
+        if( !$section ) {
+            return false;
+        }
+
+        $sectionId = $section->id;
+        $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
+
+        return [
+            'id' => $sectionId,
+            'entryTypeId' => $entryTypeId,
+        ];
+    }
+
+    public static function getFilmTagSectionInfo()
+    {
+        $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'filmTagsSection' ) );
+
+        if( !$section ) {
+            return false;
+        }
+
+        $sectionId = $section->id;
+        $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
+
+        return [
+            'id' => $sectionId,
+            'entryTypeId' => $entryTypeId,
+        ];
+    }
+
+    public static function getSiteTagSectionInfo()
+    {
+        $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'siteTagsSection' ) );
+
+        if( !$section ) {
+            return false;
+        }
+
+        $sectionId = $section->id;
+        $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
+
+        return [
+            'id' => $sectionId,
+            'entryTypeId' => $entryTypeId,
+        ];
+    }
+
+    public static function getThemeTagSectionInfo()
+    {
+        $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'themeTagsSection' ) );
+
+        if( !$section ) {
+            return false;
+        }
+
+        $sectionId = $section->id;
+        $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
+
+        return [
+            'id' => $sectionId,
+            'entryTypeId' => $entryTypeId,
+        ];
+    }
+
+    public static function getTopicTagSectionInfo()
+    {
+        $section = Craft::$app->sections->getSectionByHandle( SettingsHelper::get( 'topicTagsSection' ) );
+
+        if( !$section ) {
+            return false;
+        }
+
+        $sectionId = $section->id;
+        $entryTypeId = Craft::$app->sections->getEntryTypesBySectionId( $sectionId );
+
+        return [
+            'id' => $sectionId,
+            'entryTypeId' => $entryTypeId,
+        ];
     }
 
     public static function getShowSectionTypeId()
@@ -88,17 +190,17 @@ class SynchronizeHelper
     public static function getAssetFolderId()
     {
         $volume = Craft::$app->volumes->getVolumeByHandle( SettingsHelper::get( 'mediaAssetVolume' ) );
-        
+
         if( !$volume ) {
             return false;
         }
 
         $folder = Craft::$app->assets->findFolder( [ 'parentId' => $volume->id ] );
-        
+
         if( !$folder ) {
             return false;
         }
-        
+
         return $folder->id;
     }
 
@@ -156,7 +258,7 @@ class SynchronizeHelper
     {
         return self::getCraftFieldHandleByApiHandle( 'season' );
     }
-    
+
     public static function getEpisodeField()
     {
         return self::getCraftFieldHandleByApiHandle( 'episode' );
@@ -244,7 +346,7 @@ class SynchronizeHelper
 
     // Private Static Methods
     // =========================================================================
-    
+
     private static function getCraftFieldHandleByApiHandle( $fieldApiHandle, $settingName = 'apiColumnFields' )
     {
         $fieldsToSearch = SettingsHelper::get( $settingName );
@@ -265,7 +367,7 @@ class SynchronizeHelper
 
         return $fieldHandle;
     }
-    
+
     private static function getApiRuleByApiHandle( $fieldApiHandle, $settingName = 'apiColumnFields' )
     {
         $fieldsToSearch = SettingsHelper::get( $settingName );

@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.0.5 - 2025-04-08
+- fix issue where media would fail to sync if a "site" was not found when syncing Site tags
+
 ## 4.0.4 - 2025-03-11
 - add support for entrified tags to prep for Craft 5
 

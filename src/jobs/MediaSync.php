@@ -227,11 +227,14 @@ class MediaSync extends BaseJob
                         foreach( $this->siteId as $siteId ) {
 
                             $site = Craft::$app->sites->getSiteById( $siteId );
-                            $siteTagSectionInfo = SynchronizeHelper::getSiteTagSectionInfo();
-                            $tag = $this->findOrCreateTag( $site->name, $siteTagSectionInfo );
+                            if($site) {
 
-                            if( $tag ) {
-                                array_push( $siteTags, $tag->id );
+                                $siteTagSectionInfo = SynchronizeHelper::getSiteTagSectionInfo();
+                                $tag = $this->findOrCreateTag($site->name, $siteTagSectionInfo);
+
+                                if ($tag) {
+                                    array_push($siteTags, $tag->id);
+                                }
                             }
 
                         }

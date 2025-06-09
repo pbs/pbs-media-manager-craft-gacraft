@@ -100,9 +100,15 @@
 			
 			$mediaFieldsToSync = $request->getBodyParam('mediaFieldsToSync');
 			$showFieldsToSync = $request->getBodyParam('showFieldsToSync');
-			
-			$scheduledSync->mediaFieldsToSync = $mediaFieldsToSync === '*' ? '*' : join(',', $mediaFieldsToSync);
-			$scheduledSync->showFieldsToSync = $showFieldsToSync === '*' ? '*' : join(',', $showFieldsToSync);
+
+            if($mediaFieldsToSync && $mediaFieldsToSync !== ""){
+                $scheduledSync->mediaFieldsToSync = $mediaFieldsToSync === '*' ? '*' : join(',', $mediaFieldsToSync);
+            }
+
+            if ($showFieldsToSync && $showFieldsToSync !== "") {
+                $scheduledSync->showFieldsToSync = $showFieldsToSync === '*' ? '*' : join(',', $showFieldsToSync);
+            }
+
 			$scheduledSync->regenerateThumbnail = $request->getBodyParam('forceRegenerateThumbnail') ?? false;
 			
 			if(!MediaManager::getInstance()->scheduledSync->saveScheduledSync($scheduledSync)) {

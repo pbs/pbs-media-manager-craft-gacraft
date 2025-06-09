@@ -14,6 +14,7 @@
       init: function () {
         var self = this;
 
+
         this.addListener($('#synchronizeshowbtn'), 'activate', 'synchronizeShow');
         this.addListener($('#synchronize-single-button'), 'activate', 'synchronizeSingle');
         this.addListener($('#synchronize-all-button'), 'activate', 'synchronizeAll');

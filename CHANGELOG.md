@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.6 - 2025-04-08
+- fix type error when creating a scheduled sync that had empty Media Fields or Show Fields.
+- add ability to delete scheduled syncs
+
 ## 4.0.5 - 2025-04-08
 - fix issue where media would fail to sync if a "site" was not found when syncing Site tags
 

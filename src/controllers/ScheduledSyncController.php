@@ -122,4 +122,28 @@
 			Craft::$app->getSession()->setNotice(Craft::t('mediamanager', 'Scheduled sync saved.'));
 			return $this->redirectToPostedUrl($scheduledSync);
 		}
+
+        public function actionDelete(): Response
+        {
+            $this->requirePostRequest();
+            $request = $this->request;
+
+            $scheduledSyncId = $request->getBodyParam('scheduledSyncId');
+
+            $success = MediaManager::getInstance()->scheduledSync->deleteScheduledSyncById($scheduledSyncId);
+
+            if(!$success) {
+                Craft::$app->getSession()->setError(Craft::t('mediamanager', 'Couldn’t delete scheduled sync.'));
+            } else {
+                Craft::$app->getSession()->setNotice(Craft::t('mediamanager', 'Scheduled sync deleted.'));
+            }
+
+            if($request->getBodyParam('isJson')) {
+                return $this->asJson([
+                    'success' => $success
+                ]);
+            }
+
+            return $this->redirectToPostedUrl();
+        }
 	}
